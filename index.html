@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tech Manthan 6.0 | Biometric Palm Reveal</title>
+    <meta name="description" content="Official Biometric Palm Reveal & Inauguration System for Tech Manthan 6.0 - BCA Department, Dr. B.B. Hegde First Grade College, Kundapura.">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;800;900&family=Rajdhani:wght@500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="TC1.png">
+    <link rel="shortcut icon" type="image/png" href="TC1.png">
+
+    <!-- Core Stylesheets -->
+    <link rel="stylesheet" href="style.css">
+
+    <!-- MediaPipe Hands & Camera Utils CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands/hands.js" crossorigin="anonymous"></script>
+</head>
+<body>
+
+    <!-- Cyber Background Overlays -->
+    <div class="cyber-crt"></div>
+    <div class="cyber-vignette"></div>
+    <div class="cyber-grid"></div>
+    <canvas id="particle-canvas"></canvas>
+
+    <!-- White Flash Transition Overlay -->
+    <div class="ceremony-flash-overlay"></div>
+
+    <!-- Top Navigation & Telemetry HUD -->
+    <header class="top-hud-bar">
+        <div class="brand-wrapper">
+            <img src="TC1.png" alt="Tech Manthan 6.0 Logo" class="brand-mini-logo">
+            <div class="brand-text">
+                <h2>TECH MANTHAN 6.0</h2>
+                <span>Dr. B.B. Hegde College • BCA</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Stage Section -->
+    <main class="main-stage">
+        
+        <div class="college-header-badge">
+            🏛️ Dr. B.B. Hegde First Grade College, Kundapura • Department of BCA
+        </div>
+
+        <!-- STAGE GRID: LOGO SHOWCASE + BIOMETRIC CAMERA SCANNER -->
+        <div class="stage-grid">
+            
+            <!-- LEFT PANEL: HOLOGRAPHIC LOGO WITH CONTINUOUS & DYNAMIC ZOOM IN/OUT -->
+            <div class="logo-showcase-panel">
+                <div class="logo-holodeck">
+                    <div class="holo-ring-outer"></div>
+                    <div class="holo-ring-middle"></div>
+                    <div class="holo-ring-inner"></div>
+                    <img src="TC1.png" alt="Tech Manthan 6.0 Official Emblem" class="official-event-logo" id="official-logo">
+                </div>
+
+                <div class="logo-info-caption">
+                    <h1 class="event-main-title">TECH MANTHAN 6.0</h1>
+                    <p class="event-motto">DIVIDED BY ZERO, UNITED BY ONE</p>
+                    <span class="department-tag">[ DEPARTMENT OF COMPUTER APPLICATIONS ]</span>
+                </div>
+            </div>
+
+            <!-- RIGHT PANEL: CAMERA BIOMETRIC PALM SCANNER -->
+            <div class="scanner-card">
+                <div class="hud-corner top-left"></div>
+                <div class="hud-corner top-right"></div>
+                <div class="hud-corner bottom-left"></div>
+                <div class="hud-corner bottom-right"></div>
+
+                <div class="scanner-header">
+                    <h3>
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm0 18a8 8 0 1 1 8-8 8 8 0 0 1-8 8z"></path>
+                            <circle cx="12" cy="12" r="3"></circle>
+                        </svg>
+                        BIOMETRIC PALM SENSOR
+                    </h3>
+                    <div class="status-badge" style="padding: 3px 10px; font-size: 0.7rem;">
+                        <span class="pulse-dot"></span>
+                        <span id="telemetry-hash">HASH: 0x7FA9B2</span>
+                    </div>
+                </div>
+
+                <p class="scanner-instruction">
+                    Place your Palm for 2 Seconds in Front of Camera or Hold Sensor to Reveal Website
+                </p>
+
+                <!-- Camera Viewport with Hand Landmark Overlay -->
+                <div class="camera-viewport">
+                    <video id="camera-video" playsinline autoplay muted></video>
+                    <canvas id="biometric-canvas"></canvas>
+                    <div class="laser-scan-line"></div>
+
+                    <!-- Live Telemetry Readout -->
+                    <div class="telemetry-readout">
+                        <span id="telemetry-status">ALIGN PALM IN RETICLE (2s SCAN)</span>
+                        <span id="telemetry-density">DERMAL: 99.4%</span>
+                    </div>
+                </div>
+
+                <!-- Progress Bar -->
+                <div class="scan-progress-wrapper">
+                    <div class="progress-labels">
+                        <span>AUTHENTICATION PROTOCOL (2.0s)</span>
+                        <span id="progress-percent">0%</span>
+                    </div>
+                    <div class="progress-track">
+                        <div class="progress-fill" id="progress-fill"></div>
+                    </div>
+                </div>
+
+                <!-- Action Controls -->
+                <div class="scanner-actions">
+                    <button class="cyber-btn-primary" id="manualScanBtn">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M18 11V6a2 2 0 0 0-2-2v0a2 2 0 0 0-2 2v0"></path>
+                            <path d="M14 10V4a2 2 0 0 0-2-2v0a2 2 0 0 0-2 2v2"></path>
+                            <path d="M10 10.5V6a2 2 0 0 0-2-2v0a2 2 0 0 0-2 2v8"></path>
+                            <path d="M18 8a2 2 0 1 1 4 0v6a8 8 0 0 1-8 8h-2c-2.8 0-4.5-.86-5.99-2.34l-3.6-3.6a2 2 0 0 1 2.83-2.82L7 15"></path>
+                        </svg>
+                        HOLD PALM 2s TO SCAN
+                    </button>
+                    <button class="cyber-btn-secondary" id="instantRevealBtn" title="Instant Ceremony Launch">
+                        ⚡ REVEAL
+                    </button>
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- ==================================================================
+             GRAND REVEALED PORTAL STAGE (ACTIVATED UPON 100% PALM SCAN)
+             ================================================================== -->
+        <div class="reveal-unveiled-stage">
+
+            <!-- Embedded Live Revealed Website Container (Full Screen) -->
+            <div class="revealed-website-container">
+                <iframe src="https://tech.manthana.bbhegdecollege.com/home.html" class="revealed-website-iframe" title="Tech Manthan 6.0 Official Website"></iframe>
+            </div>
+
+        </div>
+
+    </main>
+
+    <!-- LIVE PORTAL PREVIEW MODAL IFRAME -->
+    <div class="modal-overlay" id="portalModal">
+        <div class="modal-portal-content">
+            <div class="modal-header-bar">
+                <h4>🌐 TECH MANTHAN 6.0 LIVE PORTAL PREVIEW</h4>
+                <button class="modal-close-btn" id="closePortalModalBtn">&times;</button>
+            </div>
+            <iframe src="https://tech.manthana.bbhegdecollege.com/home.html" class="portal-iframe" title="Tech Manthan 6.0 Official Website"></iframe>
+        </div>
+    </div>
+
+    <!-- Application Logic Scripts -->
+    <script src="particles.js"></script>
+    <script src="audio.js"></script>
+    <script src="scanner.js"></script>
+
+</body>
+</html>
