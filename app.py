@@ -85,6 +85,28 @@ async def get_status() -> Dict[str, Any]:
         "revealed": ceremony_state["revealed"]
     }
 
+from fastapi.responses import FileResponse, JSONResponse, HTMLResponse
+import urllib.request
+
+@app.get("/api/proxy-home")
+def proxy_home():
+    """Proxy official Tech Manthan home page to strip X-Frame-Options and allow clean iframe rendering."""
+    target_url = "https://tech.manthana.bbhegdecollege.com/home.html"
+    req = urllib.request.Request(target_url, headers={
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
+    })
+    try:
+        with urllib.request.urlopen(req, timeout=5) as response:
+            html = response.read().decode('utf-8', errors='ignore')
+            # Inject base tag so all relative CSS, JS, images resolve to official domain
+            if '<head>' in html:
+                html = html.replace('<head>', '<head><base href="https://tech.manthana.bbhegdecollege.com/">')
+            elif '<HEAD>' in html:
+                html = html.replace('<HEAD>', '<HEAD><base href="https://tech.manthana.bbhegdecollege.com/">')
+            return HTMLResponse(content=html)
+    except Exception as e:
+        return HTMLResponse(content=f"<div style='background:#030712;color:#00f3ff;padding:40px;text-align:center;font-family:sans-serif;'><h2>TECH MANTHAN 6.0 OFFICIAL PORTAL</h2><p>Redirecting to official website...</p><script>window.location.href='https://tech.manthana.bbhegdecollege.com/home.html#events';</script></div>")
+
 @app.post("/api/verify-palm")
 async def verify_palm(payload: PalmScanPayload) -> Dict[str, Any]:
     """Process biometric palm scan telemetry and authenticate portal reveal."""
