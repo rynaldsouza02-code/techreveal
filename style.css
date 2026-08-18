@@ -1124,17 +1124,9 @@ body::before {
    CEREMONIAL FLASH & SHOCKWAVE TRANSITION OVERLAY
    ========================================================================== */
 .ceremony-flash-overlay {
-    position: fixed;
-    top: 0; left: 0; width: 100%; height: 100%;
-    background: #ffffff;
-    z-index: 999;
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 0.08s ease;
-}
-
-.ceremony-flash-overlay.active {
-    opacity: 0.95;
+    display: none !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
 }
 
 /* ==========================================================================

@@ -416,11 +416,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
         particles.createRevealExplosion(logoCenterX, logoCenterY);
 
-        // 4. White Flash Transition
-        if (flashOverlay) {
-            flashOverlay.classList.add('active');
-            setTimeout(() => flashOverlay.classList.remove('active'), 250);
-        }
+        // 4. Particle Shockwaves
+        particles.createShockwave(logoCenterX, logoCenterY, '#00f3ff', 1200);
 
         // 5. Notify Backend API
         try {
@@ -433,7 +430,32 @@ document.addEventListener('DOMContentLoaded', () => {
             console.log("Backend offline or local preview mode.");
         }
 
-        // 6. Fast transition (600ms) to reveal home page, speak motto, and smooth auto-scroll to Events Directory
+        // Helper for silky smooth slow auto-scroll (2.5 seconds glide duration)
+        function slowSmoothScroll(element, targetY, durationMs = 2500) {
+            if (!element) return;
+            const startY = element.scrollTop;
+            const distance = targetY - startY;
+            const startTime = performance.now();
+
+            function step(currentTime) {
+                const elapsed = currentTime - startTime;
+                const progress = Math.min(elapsed / durationMs, 1);
+                // Cubic easeInOut easing for elegant slow movement
+                const ease = progress < 0.5 
+                    ? 4 * progress * progress * progress 
+                    : 1 - Math.pow(-2 * progress + 2, 3) / 2;
+
+                element.scrollTop = startY + distance * ease;
+
+                if (progress < 1) {
+                    requestAnimationFrame(step);
+                }
+            }
+
+            requestAnimationFrame(step);
+        }
+
+        // 6. Reveal home page, speak motto, and slowly auto-scroll to Events Directory
         setTimeout(() => {
             if (stageGrid) stageGrid.style.display = 'none';
             const topBar = document.querySelector('.top-hud-bar');
@@ -449,23 +471,24 @@ document.addEventListener('DOMContentLoaded', () => {
             const revealedIframe = document.getElementById('revealedIframe');
 
             if (websiteContainer) {
-                websiteContainer.scrollTo({ top: 0, behavior: 'auto' });
+                websiteContainer.scrollTop = 0;
             }
 
-            // Speak motto announcement out loud and execute smooth auto-scroll
+            // Speak motto announcement and then perform slow glide scroll
             const performAutoScroll = () => {
+                // Longer delay (1800ms) so user can admire the top hero header before scrolling
                 setTimeout(() => {
                     if (websiteContainer) {
-                        websiteContainer.scrollTo({ top: 650, behavior: 'smooth' });
+                        slowSmoothScroll(websiteContainer, 650, 2500);
                     }
                     if (revealedIframe) {
                         try {
                             if (revealedIframe.contentWindow) {
-                                revealedIframe.contentWindow.scrollTo({ top: 650, behavior: 'smooth' });
+                                slowSmoothScroll(revealedIframe.contentWindow.document.documentElement, 650, 2500);
                             }
                         } catch (e) {}
                     }
-                }, 500);
+                }, 1800);
             };
 
             if (audio) {
