@@ -467,7 +467,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const redirectToPortal = () => {
                 setTimeout(() => {
-                    window.location.href = "https://tech.manthana.bbhegdecollege.com/home.html";
+                    window.location.href = "https://tech.manthana.bbhegdecollege.com/home.html#events";
                 }, 800);
             };
 
