@@ -450,17 +450,63 @@ document.addEventListener('DOMContentLoaded', () => {
                 revealedIframe.style.transform = 'translateY(0)';
             }
 
-            // Speak motto announcement out loud
-            if (audio) {
-                audio.speakText("TECH MANTHAN 6.0 — DIVIDED BY ZERO, UNITED BY ONE.", () => {
-                    // Redirect directly to official portal home page (Events Directory section)
+            // Trigger Automated Voice Narration Ceremony Tour & Slow Smooth Scroll Sequence
+            const subtitleText = document.getElementById('subtitleText');
+            const subtitleBar = document.getElementById('ceremonySubtitleBar');
+            const revealedIframe = document.getElementById('revealedIframe');
+            const virtualCursor = document.getElementById('virtualCursor');
+            const cursorLabel = document.getElementById('cursorLabel');
+
+            if (subtitleBar) subtitleBar.style.display = 'flex';
+            if (virtualCursor) virtualCursor.classList.add('active');
+
+            const updateSubtitles = (text) => {
+                if (subtitleText) {
+                    subtitleText.style.opacity = '0';
                     setTimeout(() => {
-                        window.location.href = "https://tech.manthana.bbhegdecollege.com/home.html#events";
-                    }, 500);
-                });
-            } else {
-                window.location.href = "https://tech.manthana.bbhegdecollege.com/home.html#events";
-            }
+                        subtitleText.innerText = text;
+                        subtitleText.style.opacity = '1';
+                    }, 150);
+                }
+            };
+
+            const scrollToEventsSlow = () => {
+                if (revealedIframe) {
+                    try {
+                        if (revealedIframe.contentWindow) {
+                            revealedIframe.contentWindow.scrollTo({ top: 680, behavior: 'smooth' });
+                        }
+                    } catch (err) {}
+                    // Slow smooth visual transition to Events Directory on portal
+                    revealedIframe.style.transform = 'translateY(-560px)';
+                }
+            };
+
+            const scrollToTopSlow = () => {
+                if (revealedIframe) {
+                    try {
+                        if (revealedIframe.contentWindow) {
+                            revealedIframe.contentWindow.scrollTo({ top: 0, behavior: 'smooth' });
+                        }
+                    } catch (err) {}
+                    revealedIframe.style.transform = 'translateY(0px)';
+                }
+            };
+
+            const moveCursor = (xPercent, yPercent, label) => {
+                if (virtualCursor) {
+                    virtualCursor.style.left = `${xPercent}%`;
+                    virtualCursor.style.top = `${yPercent}%`;
+                    virtualCursor.classList.add('hovering');
+                    setTimeout(() => virtualCursor.classList.remove('hovering'), 600);
+                }
+                if (cursorLabel) {
+                    cursorLabel.innerText = label || "CARD SELECTOR";
+                }
+                if (audio) audio.playScanChirp(0.75);
+            };
+
+            audio.startCeremonyVoiceTour(updateSubtitles, scrollToEventsSlow, scrollToTopSlow, moveCursor);
         }, 600);
     }
 
