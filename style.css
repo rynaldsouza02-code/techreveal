@@ -1143,13 +1143,10 @@ body::before {
 
 .revealed-website-container {
     position: relative;
-    width: 100%;
+    width: 100vw;
     height: 100vh;
-    overflow-y: auto;
-    overflow-x: hidden;
-    scroll-behavior: smooth;
+    overflow: hidden;
     background: #030712;
-    -webkit-overflow-scrolling: touch;
 }
 
 .revealed-website-iframe {
@@ -1157,6 +1154,9 @@ body::before {
     height: 2600px;
     border: none;
     display: block;
+    transform: translateY(0);
+    transition: transform 4.5s cubic-bezier(0.25, 1, 0.5, 1);
+    will-change: transform;
 }
 
 /* Automated Cyber Virtual Cursor */

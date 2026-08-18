@@ -468,18 +468,18 @@ document.addEventListener('DOMContentLoaded', () => {
             const websiteContainer = document.querySelector('.revealed-website-container');
             const revealedIframe = document.getElementById('revealedIframe');
 
-            if (websiteContainer) {
-                websiteContainer.scrollTop = 0;
+            if (revealedIframe) {
+                revealedIframe.style.transform = 'translateY(0)';
             }
 
-            // Speak motto announcement and then execute slow, silky-smooth auto-scroll to Events Directory
+            // Speak motto announcement out loud and execute smooth 4.5s auto-scroll glide
             const performAutoScroll = () => {
                 setTimeout(() => {
-                    // Slow 6.0-second glide down to Events Directory section
-                    if (websiteContainer) {
-                        slowSmoothScroll(websiteContainer, 720, 6000);
+                    if (revealedIframe) {
+                        // Smoothly glides down into the Events Directory section
+                        revealedIframe.style.transform = 'translateY(-600px)';
                     }
-                }, 1400);
+                }, 1200);
             };
 
             if (audio) {
