@@ -1152,17 +1152,19 @@ body::before {
 .revealed-website-container {
     position: relative;
     width: 100%;
-    height: 100%;
-    overflow: hidden;
+    height: 100vh;
+    overflow-y: auto;
+    overflow-x: hidden;
+    scroll-behavior: smooth;
     background: #030712;
+    -webkit-overflow-scrolling: touch;
 }
 
 .revealed-website-iframe {
     width: 100%;
-    height: 100%;
+    height: 2600px;
     border: none;
-    transition: transform 2.2s cubic-bezier(0.25, 1, 0.5, 1);
-    will-change: transform;
+    display: block;
 }
 
 /* Automated Cyber Virtual Cursor */

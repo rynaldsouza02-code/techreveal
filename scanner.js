@@ -433,63 +433,46 @@ document.addEventListener('DOMContentLoaded', () => {
             console.log("Backend offline or local preview mode.");
         }
 
-            // Trigger Automated Voice Narration Ceremony Tour, Virtual Cursor & Slow Smooth Scroll
-            const subtitleText = document.getElementById('subtitleText');
-            const subtitleBar = document.getElementById('ceremonySubtitleBar');
+        // 6. Fast transition (600ms) to reveal home page, speak motto, and smooth auto-scroll to Events Directory
+        setTimeout(() => {
+            if (stageGrid) stageGrid.style.display = 'none';
+            const topBar = document.querySelector('.top-hud-bar');
+            if (topBar) topBar.style.display = 'none';
+            const collegeBadge = document.querySelector('.college-header-badge');
+            if (collegeBadge) collegeBadge.style.display = 'none';
+
+            if (revealUnveiled) {
+                revealUnveiled.style.display = 'flex';
+            }
+
+            const websiteContainer = document.querySelector('.revealed-website-container');
             const revealedIframe = document.getElementById('revealedIframe');
-            const virtualCursor = document.getElementById('virtualCursor');
-            const cursorLabel = document.getElementById('cursorLabel');
 
-            if (subtitleBar) subtitleBar.style.display = 'flex';
-            if (virtualCursor) virtualCursor.classList.add('active');
+            if (websiteContainer) {
+                websiteContainer.scrollTo({ top: 0, behavior: 'auto' });
+            }
 
-            const updateSubtitles = (text) => {
-                if (subtitleText) {
-                    subtitleText.style.opacity = '0';
-                    setTimeout(() => {
-                        subtitleText.innerText = text;
-                        subtitleText.style.opacity = '1';
-                    }, 150);
-                }
+            // Speak motto announcement out loud and execute smooth auto-scroll
+            const performAutoScroll = () => {
+                setTimeout(() => {
+                    if (websiteContainer) {
+                        websiteContainer.scrollTo({ top: 650, behavior: 'smooth' });
+                    }
+                    if (revealedIframe) {
+                        try {
+                            if (revealedIframe.contentWindow) {
+                                revealedIframe.contentWindow.scrollTo({ top: 650, behavior: 'smooth' });
+                            }
+                        } catch (e) {}
+                    }
+                }, 500);
             };
 
-            const scrollToEvents = () => {
-                if (revealedIframe) {
-                    try {
-                        if (revealedIframe.contentWindow) {
-                            revealedIframe.contentWindow.scrollTo({ top: 580, behavior: 'smooth' });
-                        }
-                    } catch (err) {}
-                    // Slow smooth visual transition down to Events Directory
-                    revealedIframe.style.transform = 'translateY(-480px)';
-                }
-            };
-
-            const scrollToTop = () => {
-                if (revealedIframe) {
-                    try {
-                        if (revealedIframe.contentWindow) {
-                            revealedIframe.contentWindow.scrollTo({ top: 0, behavior: 'smooth' });
-                        }
-                    } catch (err) {}
-                    revealedIframe.style.transform = 'translateY(0px)';
-                }
-            };
-
-            const moveCursor = (xPercent, yPercent, label) => {
-                if (virtualCursor) {
-                    virtualCursor.style.left = `${xPercent}%`;
-                    virtualCursor.style.top = `${yPercent}%`;
-                    virtualCursor.classList.add('hovering');
-                    setTimeout(() => virtualCursor.classList.remove('hovering'), 500);
-                }
-                if (cursorLabel) {
-                    cursorLabel.innerText = label || "CARD SELECTOR";
-                }
-                audio.playScanChirp(0.75);
-            };
-
-            audio.startCeremonyVoiceTour(updateSubtitles, scrollToEvents, scrollToTop, moveCursor);
+            if (audio) {
+                audio.speakText("TECH MANTHAN 6.0 — DIVIDED BY ZERO, UNITED BY ONE.", performAutoScroll);
+            } else {
+                performAutoScroll();
+            }
         }, 600);
     }
 
