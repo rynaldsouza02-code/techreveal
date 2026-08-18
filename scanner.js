@@ -433,7 +433,7 @@ document.addEventListener('DOMContentLoaded', () => {
             console.log("Backend offline or local preview mode.");
         }
 
-        // 6. Fast transition (600ms) to reveal the website stage in full screen
+        // 6. Fast transition (600ms) to reveal and redirect directly to official home page
         setTimeout(() => {
             if (stageGrid) stageGrid.style.display = 'none';
             const topBar = document.querySelector('.top-hud-bar');
@@ -441,75 +441,20 @@ document.addEventListener('DOMContentLoaded', () => {
             const collegeBadge = document.querySelector('.college-header-badge');
             if (collegeBadge) collegeBadge.style.display = 'none';
 
+            // Show full screen iframe stage or redirect directly to official home page
             if (revealUnveiled) {
                 revealUnveiled.style.display = 'flex';
             }
 
-            // Attempt automatic browser fullscreen
-            if (!document.fullscreenElement && document.documentElement.requestFullscreen) {
-                document.documentElement.requestFullscreen().catch(() => {});
+            const revealedIframe = document.getElementById('revealedIframe');
+            if (revealedIframe) {
+                revealedIframe.style.transform = 'translateY(0)';
             }
 
-            // Trigger extra victory particles
-            particles.createShockwave(window.innerWidth / 2, window.innerHeight / 2, '#00f3ff', 1200);
-            setTimeout(() => particles.createShockwave(window.innerWidth / 2, window.innerHeight / 2, '#bc13fe', 1400), 200);
-
-            // Trigger Automated Voice Narration Ceremony Tour, Virtual Cursor & Scroll Sequence
-            const subtitleText = document.getElementById('subtitleText');
-            const subtitleBar = document.getElementById('ceremonySubtitleBar');
-            const revealedIframe = document.getElementById('revealedIframe');
-            const virtualCursor = document.getElementById('virtualCursor');
-            const cursorLabel = document.getElementById('cursorLabel');
-
-            if (subtitleBar) subtitleBar.style.display = 'flex';
-            if (virtualCursor) virtualCursor.classList.add('active');
-
-            const updateSubtitles = (text) => {
-                if (subtitleText) {
-                    subtitleText.style.opacity = '0';
-                    setTimeout(() => {
-                        subtitleText.innerText = text;
-                        subtitleText.style.opacity = '1';
-                    }, 150);
-                }
-            };
-
-            const scrollToEvents = () => {
-                if (revealedIframe) {
-                    try {
-                        if (revealedIframe.contentWindow) {
-                            revealedIframe.contentWindow.scrollTo({ top: 680, behavior: 'smooth' });
-                        }
-                    } catch (err) {}
-                    revealedIframe.style.transform = 'translateY(-580px)';
-                }
-            };
-
-            const scrollToTop = () => {
-                if (revealedIframe) {
-                    try {
-                        if (revealedIframe.contentWindow) {
-                            revealedIframe.contentWindow.scrollTo({ top: 0, behavior: 'smooth' });
-                        }
-                    } catch (err) {}
-                    revealedIframe.style.transform = 'translateY(0px)';
-                }
-            };
-
-            const moveCursor = (xPercent, yPercent, label) => {
-                if (virtualCursor) {
-                    virtualCursor.style.left = `${xPercent}%`;
-                    virtualCursor.style.top = `${yPercent}%`;
-                    virtualCursor.classList.add('hovering');
-                    setTimeout(() => virtualCursor.classList.remove('hovering'), 500);
-                }
-                if (cursorLabel) {
-                    cursorLabel.innerText = label || "CARD SELECTOR";
-                }
-                audio.playScanChirp(0.75);
-            };
-
-            audio.startCeremonyVoiceTour(updateSubtitles, scrollToEvents, scrollToTop, moveCursor);
+            // Direct page redirection to official portal home page
+            setTimeout(() => {
+                window.location.href = "https://tech.manthana.bbhegdecollege.com/home.html";
+            }, 800);
         }, 600);
     }
 
