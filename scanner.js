@@ -433,7 +433,7 @@ document.addEventListener('DOMContentLoaded', () => {
             console.log("Backend offline or local preview mode.");
         }
 
-        // 6. Fast transition (600ms) to reveal and redirect directly to official home page
+        // 6. Fast transition (600ms) to reveal home page, speak motto and scroll to Events Directory
         setTimeout(() => {
             if (stageGrid) stageGrid.style.display = 'none';
             const topBar = document.querySelector('.top-hud-bar');
@@ -441,7 +441,6 @@ document.addEventListener('DOMContentLoaded', () => {
             const collegeBadge = document.querySelector('.college-header-badge');
             if (collegeBadge) collegeBadge.style.display = 'none';
 
-            // Show full screen iframe stage or redirect directly to official home page
             if (revealUnveiled) {
                 revealUnveiled.style.display = 'flex';
             }
@@ -451,10 +450,30 @@ document.addEventListener('DOMContentLoaded', () => {
                 revealedIframe.style.transform = 'translateY(0)';
             }
 
-            // Direct page redirection to official portal home page
-            setTimeout(() => {
-                window.location.href = "https://tech.manthana.bbhegdecollege.com/home.html";
-            }, 800);
+            // Speak motto announcement out loud
+            if (audio) {
+                audio.speakText("TECH MANTHAN 6.0 — DIVIDED BY ZERO, UNITED BY ONE.", () => {
+                    // After motto is announced, smoothly scroll down into the Events Directory section
+                    setTimeout(() => {
+                        if (revealedIframe) {
+                            try {
+                                if (revealedIframe.contentWindow) {
+                                    const eventsEl = revealedIframe.contentWindow.document.getElementById('events') || 
+                                                     revealedIframe.contentWindow.document.getElementById('catalogTitle');
+                                    if (eventsEl) {
+                                        eventsEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                                    } else {
+                                        revealedIframe.contentWindow.scrollTo({ top: 580, behavior: 'smooth' });
+                                    }
+                                }
+                            } catch (e) {
+                                // Container scroll fallback if cross-origin scroll is constrained
+                                revealedIframe.style.transform = 'translateY(-520px)';
+                            }
+                        }
+                    }, 400);
+                });
+            }
         }, 600);
     }
 
