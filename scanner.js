@@ -454,21 +454,62 @@ document.addEventListener('DOMContentLoaded', () => {
             particles.createShockwave(window.innerWidth / 2, window.innerHeight / 2, '#00f3ff', 1200);
             setTimeout(() => particles.createShockwave(window.innerWidth / 2, window.innerHeight / 2, '#bc13fe', 1400), 200);
 
-            // Clean full screen reveal of official home page
+            // Trigger Automated Voice Narration Ceremony Tour, Virtual Cursor & Scroll Sequence
+            const subtitleText = document.getElementById('subtitleText');
+            const subtitleBar = document.getElementById('ceremonySubtitleBar');
             const revealedIframe = document.getElementById('revealedIframe');
-            if (revealedIframe) {
-                revealedIframe.style.transform = 'translateY(0)';
-                try {
-                    if (revealedIframe.contentWindow) {
-                        revealedIframe.contentWindow.scrollTo({ top: 0, behavior: 'smooth' });
-                    }
-                } catch (err) {}
-            }
+            const virtualCursor = document.getElementById('virtualCursor');
+            const cursorLabel = document.getElementById('cursorLabel');
 
-            // Speak motto announcement upon unveil
-            if (audio) {
-                audio.speakText("TECH MANTHAN 6.0 — DIVIDED BY ZERO, UNITED BY ONE. Welcome to the official portal!");
-            }
+            if (subtitleBar) subtitleBar.style.display = 'flex';
+            if (virtualCursor) virtualCursor.classList.add('active');
+
+            const updateSubtitles = (text) => {
+                if (subtitleText) {
+                    subtitleText.style.opacity = '0';
+                    setTimeout(() => {
+                        subtitleText.innerText = text;
+                        subtitleText.style.opacity = '1';
+                    }, 150);
+                }
+            };
+
+            const scrollToEvents = () => {
+                if (revealedIframe) {
+                    try {
+                        if (revealedIframe.contentWindow) {
+                            revealedIframe.contentWindow.scrollTo({ top: 680, behavior: 'smooth' });
+                        }
+                    } catch (err) {}
+                    revealedIframe.style.transform = 'translateY(-580px)';
+                }
+            };
+
+            const scrollToTop = () => {
+                if (revealedIframe) {
+                    try {
+                        if (revealedIframe.contentWindow) {
+                            revealedIframe.contentWindow.scrollTo({ top: 0, behavior: 'smooth' });
+                        }
+                    } catch (err) {}
+                    revealedIframe.style.transform = 'translateY(0px)';
+                }
+            };
+
+            const moveCursor = (xPercent, yPercent, label) => {
+                if (virtualCursor) {
+                    virtualCursor.style.left = `${xPercent}%`;
+                    virtualCursor.style.top = `${yPercent}%`;
+                    virtualCursor.classList.add('hovering');
+                    setTimeout(() => virtualCursor.classList.remove('hovering'), 500);
+                }
+                if (cursorLabel) {
+                    cursorLabel.innerText = label || "CARD SELECTOR";
+                }
+                audio.playScanChirp(0.75);
+            };
+
+            audio.startCeremonyVoiceTour(updateSubtitles, scrollToEvents, scrollToTop, moveCursor);
         }, 600);
     }
 
@@ -483,6 +524,10 @@ document.addEventListener('DOMContentLoaded', () => {
             updateProgressUI();
 
             if ('speechSynthesis' in window) window.speechSynthesis.cancel();
+            const subtitleBar = document.getElementById('ceremonySubtitleBar');
+            if (subtitleBar) subtitleBar.style.display = 'none';
+            const virtualCursor = document.getElementById('virtualCursor');
+            if (virtualCursor) virtualCursor.classList.remove('active');
             const revealedIframe = document.getElementById('revealedIframe');
             if (revealedIframe) {
                 revealedIframe.style.transform = 'translateY(0)';
