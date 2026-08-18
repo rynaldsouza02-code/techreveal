@@ -84,6 +84,14 @@ document.addEventListener('DOMContentLoaded', () => {
             resizeCanvas();
             initMediaPipeHands();
             console.log("[+] Camera initialized successfully.");
+
+            // Smoothly scroll down to Biometric Palm Sensor on first page load
+            setTimeout(() => {
+                const scannerCard = document.querySelector('.scanner-card');
+                if (scannerCard) {
+                    scannerCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }
+            }, 500);
         } catch (err) {
             console.warn("[-] Camera access not granted or unavailable. Using simulated optical scanner.", err);
             isCameraActive = false;
