@@ -453,7 +453,7 @@ document.addEventListener('DOMContentLoaded', () => {
             requestAnimationFrame(step);
         }
 
-        // 6. Reveal home page, speak motto, and slowly auto-scroll to Events Directory
+        // 6. Speak motto and redirect directly to official live portal homepage
         setTimeout(() => {
             if (stageGrid) stageGrid.style.display = 'none';
             const topBar = document.querySelector('.top-hud-bar');
@@ -465,27 +465,16 @@ document.addEventListener('DOMContentLoaded', () => {
                 revealUnveiled.style.display = 'flex';
             }
 
-            const websiteContainer = document.querySelector('.revealed-website-container');
-            const revealedIframe = document.getElementById('revealedIframe');
-
-            if (revealedIframe) {
-                revealedIframe.style.transform = 'translateY(0)';
-            }
-
-            // Speak motto announcement out loud and execute smooth 4.5s auto-scroll glide
-            const performAutoScroll = () => {
+            const redirectToPortal = () => {
                 setTimeout(() => {
-                    if (revealedIframe) {
-                        // Smoothly glides down into the Events Directory section
-                        revealedIframe.style.transform = 'translateY(-600px)';
-                    }
-                }, 1200);
+                    window.location.href = "https://tech.manthana.bbhegdecollege.com/home.html";
+                }, 800);
             };
 
             if (audio) {
-                audio.speakText("TECH MANTHAN 6.0 — DIVIDED BY ZERO, UNITED BY ONE.", performAutoScroll);
+                audio.speakText("TECH MANTHAN 6.0 — DIVIDED BY ZERO, UNITED BY ONE.", redirectToPortal);
             } else {
-                performAutoScroll();
+                redirectToPortal();
             }
         }, 600);
     }
