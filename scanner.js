@@ -430,20 +430,18 @@ document.addEventListener('DOMContentLoaded', () => {
             console.log("Backend offline or local preview mode.");
         }
 
-        // Helper for silky smooth slow auto-scroll (2.5 seconds glide duration)
-        function slowSmoothScroll(element, targetY, durationMs = 2500) {
+        // Helper for silky smooth ultra-slow auto-scroll (5.5 seconds glide duration)
+        function slowSmoothScroll(element, targetY, durationMs = 5500) {
             if (!element) return;
-            const startY = element.scrollTop;
+            const startY = element.scrollTop || 0;
             const distance = targetY - startY;
             const startTime = performance.now();
 
             function step(currentTime) {
                 const elapsed = currentTime - startTime;
                 const progress = Math.min(elapsed / durationMs, 1);
-                // Cubic easeInOut easing for elegant slow movement
-                const ease = progress < 0.5 
-                    ? 4 * progress * progress * progress 
-                    : 1 - Math.pow(-2 * progress + 2, 3) / 2;
+                // Sinusoidal ease-in-out easing for ultra-gentle, silky smooth movement
+                const ease = 0.5 - Math.cos(progress * Math.PI) / 2;
 
                 element.scrollTop = startY + distance * ease;
 
@@ -476,19 +474,19 @@ document.addEventListener('DOMContentLoaded', () => {
 
             // Speak motto announcement and then perform slow glide scroll
             const performAutoScroll = () => {
-                // Longer delay (1800ms) so user can admire the top hero header before scrolling
                 setTimeout(() => {
                     if (websiteContainer) {
-                        slowSmoothScroll(websiteContainer, 650, 2500);
+                        slowSmoothScroll(websiteContainer, 650, 5500);
                     }
                     if (revealedIframe) {
                         try {
                             if (revealedIframe.contentWindow) {
-                                slowSmoothScroll(revealedIframe.contentWindow.document.documentElement, 650, 2500);
+                                slowSmoothScroll(revealedIframe.contentWindow.document.documentElement, 650, 5500);
+                                slowSmoothScroll(revealedIframe.contentWindow.document.body, 650, 5500);
                             }
                         } catch (e) {}
                     }
-                }, 1800);
+                }, 1200);
             };
 
             if (audio) {
