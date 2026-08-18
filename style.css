@@ -54,12 +54,12 @@ body {
     user-select: none;
 }
 
-/* Background Cyber Overlay */
+/* Background Cyber & Galaxy Overlay */
 body::before {
     content: "";
     position: fixed;
     top: 0; left: 0; width: 100%; height: 100%;
-    background: radial-gradient(circle at 50% 35%, rgba(10, 25, 50, 0.8) 0%, rgba(3, 7, 18, 0.96) 80%);
+    background: radial-gradient(circle at 50% 40%, rgba(15, 6, 38, 0.9) 0%, rgba(4, 1, 13, 0.97) 65%, rgba(1, 0, 5, 0.99) 100%);
     z-index: -20;
     pointer-events: none;
 }
@@ -244,6 +244,7 @@ body::before {
     padding: 25px 20px;
     position: relative;
     z-index: 10;
+    perspective: 1200px;
 }
 
 .college-header-badge {
@@ -261,8 +262,15 @@ body::before {
     color: var(--neon-cyan);
     margin-bottom: 28px;
     text-transform: uppercase;
-    box-shadow: 0 0 30px rgba(0, 243, 255, 0.3);
+    box-shadow: 0 0 30px rgba(0, 243, 255, 0.3), inset 0 0 15px rgba(0, 243, 255, 0.15);
     text-align: center;
+    transform-style: preserve-3d;
+    transition: transform 0.4s ease, box-shadow 0.4s ease;
+}
+
+.college-header-badge:hover {
+    transform: translateY(-3px) translateZ(10px);
+    box-shadow: 0 0 45px rgba(0, 243, 255, 0.6), inset 0 0 25px rgba(0, 243, 255, 0.3);
 }
 
 /* Stage View: Centered Logo Engine + Biometric Camera Palm Scanner */
@@ -276,13 +284,11 @@ body::before {
     width: 100%;
     text-align: center;
     transition: opacity 0.5s ease, transform 0.5s ease;
+    transform-style: preserve-3d;
 }
 
 /* ==========================================================================
    CENTRAL LOGO ENGINE & ZOOM IN / ZOOM OUT PHYSICS
-   ========================================================================== */
-/* ==========================================================================
-   CENTRAL LOGO ENGINE & 3D HOLODECK PHYSICS
    ========================================================================== */
 .logo-showcase-panel {
     display: flex;
@@ -291,9 +297,6 @@ body::before {
     justify-content: center;
     text-align: center;
     position: relative;
-    perspective: 1200px;
-    transform-style: preserve-3d;
-    transition: transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
 .logo-holodeck {
@@ -303,62 +306,57 @@ body::before {
     display: flex;
     align-items: center;
     justify-content: center;
-    perspective: 1200px;
-    transform-style: preserve-3d;
+    perspective: 1000px;
 }
 
-/* 3D Glowing Holographic Universe Rings */
+/* Glowing Holographic Rings */
 .holo-ring-outer {
     position: absolute;
-    width: 112%;
-    height: 112%;
+    width: 108%;
+    height: 108%;
     border-radius: 50%;
-    border: 2px dashed rgba(0, 243, 255, 0.6);
-    box-shadow: 0 0 30px rgba(0, 243, 255, 0.3);
-    transform: rotateX(65deg) rotateY(15deg);
-    animation: rotate3DClockwise 22s linear infinite;
+    border: 2px dashed rgba(0, 243, 255, 0.4);
+    animation: rotateClockwise 30s linear infinite;
     pointer-events: none;
 }
 
 .holo-ring-middle {
     position: absolute;
-    width: 98%;
-    height: 98%;
+    width: 95%;
+    height: 95%;
     border-radius: 50%;
-    border: 2px solid rgba(188, 19, 254, 0.6);
-    box-shadow: 0 0 35px rgba(188, 19, 254, 0.4);
-    transform: rotateX(65deg) rotateY(-15deg);
-    animation: rotate3DCounter 16s linear infinite;
+    border: 1px solid rgba(188, 19, 254, 0.4);
+    box-shadow: 0 0 25px rgba(188, 19, 254, 0.2);
+    animation: rotateCounter 20s linear infinite;
     pointer-events: none;
 }
 
 .holo-ring-inner {
     position: absolute;
-    width: 84%;
-    height: 84%;
+    width: 82%;
+    height: 82%;
     border-radius: 50%;
-    background: radial-gradient(circle, rgba(0, 243, 255, 0.25) 0%, rgba(188, 19, 254, 0.12) 50%, transparent 70%);
-    box-shadow: 0 0 50px rgba(0, 243, 255, 0.35);
-    animation: pulse3DEnergy 4s ease-in-out infinite alternate;
+    background: radial-gradient(circle, rgba(0, 243, 255, 0.2) 0%, rgba(188, 19, 254, 0.08) 50%, transparent 70%);
+    animation: pulseEnergy 4s ease-in-out infinite alternate;
     pointer-events: none;
 }
 
-@keyframes rotate3DClockwise {
-    0% { transform: rotateX(65deg) rotateY(15deg) rotateZ(0deg); }
-    100% { transform: rotateX(65deg) rotateY(15deg) rotateZ(360deg); }
+@keyframes rotateClockwise {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
 }
 
-@keyframes rotate3DCounter {
-    0% { transform: rotateX(65deg) rotateY(-15deg) rotateZ(360deg); }
-    100% { transform: rotateX(65deg) rotateY(-15deg) rotateZ(0deg); }
+@keyframes rotateCounter {
+    0% { transform: rotate(360deg); }
+    100% { transform: rotate(0deg); }
 }
 
-@keyframes pulse3DEnergy {
-    0% { transform: scale3d(0.92, 0.92, 0.92) translateZ(-20px); opacity: 0.5; }
-    100% { transform: scale3d(1.15, 1.15, 1.15) translateZ(30px); opacity: 1; filter: drop-shadow(0 0 45px var(--neon-cyan)); }
+@keyframes pulseEnergy {
+    0% { transform: scale(0.92); opacity: 0.5; }
+    100% { transform: scale(1.15); opacity: 1; filter: drop-shadow(0 0 35px var(--neon-cyan)); }
 }
 
-/* Official Logo with 3D Depth Zoom In / Zoom Out Physics */
+/* Official Logo with Zoom In / Zoom Out Physics */
 .official-event-logo {
     width: 85%;
     height: 85%;
@@ -366,26 +364,25 @@ body::before {
     border-radius: 50%;
     position: relative;
     z-index: 5;
-    transform-style: preserve-3d;
     transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), filter 0.4s ease;
-    animation: logo3DZoomBreathe 4.5s ease-in-out infinite alternate;
-    filter: drop-shadow(0 0 25px rgba(0, 243, 255, 0.7)) drop-shadow(0 0 45px rgba(188, 19, 254, 0.5));
+    animation: logoContinuousZoomBreathe 4s ease-in-out infinite alternate;
+    filter: drop-shadow(0 0 20px rgba(0, 243, 255, 0.6)) drop-shadow(0 0 35px rgba(188, 19, 254, 0.4));
     cursor: pointer;
 }
 
-/* 3D Zoom In / Zoom Out breathing animation */
-@keyframes logo3DZoomBreathe {
+/* Continuous idle zoom in / zoom out breathing */
+@keyframes logoContinuousZoomBreathe {
     0% {
-        transform: translateZ(10px) scale(0.94) rotate(-1deg);
-        filter: drop-shadow(0 0 20px rgba(0, 243, 255, 0.6)) drop-shadow(0 0 30px rgba(188, 19, 254, 0.4));
+        transform: scale(0.95) rotate(-1deg);
+        filter: drop-shadow(0 0 15px rgba(0, 243, 255, 0.5)) drop-shadow(0 0 25px rgba(188, 19, 254, 0.3));
     }
     50% {
-        transform: translateZ(50px) scale(1.06) rotate(1deg);
-        filter: drop-shadow(0 0 40px rgba(0, 243, 255, 0.95)) drop-shadow(0 0 60px rgba(188, 19, 254, 0.75));
+        transform: scale(1.05) rotate(1deg);
+        filter: drop-shadow(0 0 30px rgba(0, 243, 255, 0.85)) drop-shadow(0 0 45px rgba(188, 19, 254, 0.6));
     }
     100% {
-        transform: translateZ(20px) scale(0.98) rotate(0deg);
-        filter: drop-shadow(0 0 28px rgba(0, 243, 255, 0.75)) drop-shadow(0 0 40px rgba(188, 19, 254, 0.5));
+        transform: scale(0.98) rotate(0deg);
+        filter: drop-shadow(0 0 22px rgba(0, 243, 255, 0.65)) drop-shadow(0 0 35px rgba(188, 19, 254, 0.45));
     }
 }
 
@@ -476,20 +473,28 @@ body::before {
    BIOMETRIC PALM CAMERA SCANNER PANEL
    ========================================================================== */
 .scanner-card {
-    background: var(--card-bg);
-    backdrop-filter: blur(25px);
-    -webkit-backdrop-filter: blur(25px);
-    border: 1.5px solid var(--card-border);
+    background: rgba(10, 15, 32, 0.88);
+    backdrop-filter: blur(28px);
+    -webkit-backdrop-filter: blur(28px);
+    border: 1.8px solid rgba(0, 243, 255, 0.35);
     border-radius: 24px;
     padding: 24px;
     position: relative;
-    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7), 0 0 40px rgba(0, 243, 255, 0.1);
+    box-shadow: 0 25px 65px rgba(0, 0, 0, 0.8), 0 0 50px rgba(0, 243, 255, 0.18), 0 0 30px rgba(188, 19, 254, 0.15), inset 0 0 20px rgba(0, 243, 255, 0.08);
     display: flex;
     flex-direction: column;
     overflow: hidden;
     width: 100%;
     max-width: 650px;
     margin: 0 auto;
+    transform-style: preserve-3d;
+    transition: transform 0.4s cubic-bezier(0.1, 0.8, 0.2, 1), box-shadow 0.4s ease, border-color 0.4s ease;
+}
+
+.scanner-card:hover {
+    transform: translateY(-8px) rotateX(2deg) rotateY(-1.5deg) translateZ(15px);
+    border-color: var(--neon-cyan);
+    box-shadow: 0 35px 85px rgba(0, 0, 0, 0.9), 0 0 70px rgba(0, 243, 255, 0.35), 0 0 45px rgba(188, 19, 254, 0.3), inset 0 0 30px rgba(0, 243, 255, 0.15);
 }
 
 /* HUD Corners */

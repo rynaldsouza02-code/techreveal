@@ -534,33 +534,6 @@ document.addEventListener('DOMContentLoaded', () => {
         } catch (e) {}
     }
 
-    // 3D Perspective Card Tilt Tracker
-    const scannerCard = document.querySelector('.scanner-card');
-    const logoPanel = document.querySelector('.logo-showcase-panel');
-
-    function bind3DTiltEffect(element, maxTilt = 10) {
-        if (!element) return;
-        element.addEventListener('mousemove', (e) => {
-            const rect = element.getBoundingClientRect();
-            const x = e.clientX - rect.left;
-            const y = e.clientY - rect.top;
-            const centerX = rect.width / 2;
-            const centerY = rect.height / 2;
-
-            const tiltX = ((y - centerY) / centerY) * -maxTilt;
-            const tiltY = ((x - centerX) / centerX) * maxTilt;
-
-            element.style.transform = `perspective(1000px) rotateX(${tiltX.toFixed(2)}deg) rotateY(${tiltY.toFixed(2)}deg) scale3d(1.02, 1.02, 1.02)`;
-        });
-
-        element.addEventListener('mouseleave', () => {
-            element.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)';
-        });
-    }
-
-    bind3DTiltEffect(scannerCard, 8);
-    bind3DTiltEffect(logoPanel, 12);
-
     // Start Everything
     startCamera();
     initWebSocketSync();
