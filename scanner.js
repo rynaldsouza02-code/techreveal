@@ -454,10 +454,12 @@ document.addEventListener('DOMContentLoaded', () => {
             particles.createShockwave(window.innerWidth / 2, window.innerHeight / 2, '#00f3ff', 1200);
             setTimeout(() => particles.createShockwave(window.innerWidth / 2, window.innerHeight / 2, '#bc13fe', 1400), 200);
 
-            // Trigger Automated Voice Narration Ceremony Tour & Scroll Sequence
+            // Trigger Automated Voice Narration Ceremony Tour & Virtual Cursor Navigation
             const subtitleText = document.getElementById('subtitleText');
             const subtitleBar = document.getElementById('ceremonySubtitleBar');
-            const revealedIframe = document.getElementById('revealedIframe');
+            const revealedWebsiteContainer = document.getElementById('revealedWebsiteContainer');
+            const cyberCursor = document.getElementById('cyberCursor');
+            const cursorTooltip = document.getElementById('cursorTooltip');
 
             if (subtitleBar) subtitleBar.style.display = 'flex';
 
@@ -471,21 +473,65 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             };
 
-            const scrollToEvents = () => {
-                if (revealedIframe) {
-                    try {
-                        // Smoothly scroll revealed iframe to competition events directory
-                        if (revealedIframe.contentWindow) {
-                            revealedIframe.contentWindow.scrollTo({ top: 680, behavior: 'smooth' });
-                        }
-                    } catch (err) {
-                        // Fallback container scroll animation
-                        revealedIframe.style.transform = 'translateY(-280px)';
-                    }
-                }
+            const clearCardHighlights = () => {
+                document.querySelectorAll('.event-card-target').forEach(card => {
+                    card.classList.remove('card-hover-active');
+                });
             };
 
-            audio.startCeremonyVoiceTour(updateSubtitles, scrollToEvents);
+            audio.startCeremonyVoiceTour({
+                onStepCallback: updateSubtitles,
+
+                // Step 3: Unveil Website & Smooth Scroll down to Events Directory
+                onScrollDown: () => {
+                    console.log("[+] SMOOTH SCROLLING DOWN TO EVENTS DIRECTORY...");
+                    if (revealedWebsiteContainer) {
+                        revealedWebsiteContainer.style.transform = 'translateY(-480px)';
+                    }
+                    if (cyberCursor) {
+                        cyberCursor.classList.add('active');
+                        cyberCursor.style.transform = `translate(${window.innerWidth / 2 - 20}px, 200px)`;
+                    }
+                },
+
+                // Step 4: Hover each competition card sequentially (Coding -> Group Dance -> Gaming -> Best IT Manager)
+                onHoverCard: (cardIndex, cardTitle) => {
+                    console.log(`[+] AUTOMATED CURSOR HOVERING COMPETITION ${cardIndex}: ${cardTitle}`);
+                    clearCardHighlights();
+
+                    const targetCard = document.querySelector(`.event-card-target[data-card="${cardIndex}"]`);
+                    if (targetCard) {
+                        targetCard.classList.add('card-hover-active');
+                        const rect = targetCard.getBoundingClientRect();
+                        if (cyberCursor) {
+                            cyberCursor.classList.add('active');
+                            const posX = rect.left + rect.width / 2 - 10;
+                            const posY = rect.top + 25;
+                            cyberCursor.style.transform = `translate(${posX}px, ${posY}px)`;
+                        }
+                    }
+                    if (cursorTooltip) {
+                        cursorTooltip.innerText = `HOVER: ${cardTitle.toUpperCase()}`;
+                    }
+                    audio.playScanChirp(0.75 + (cardIndex * 0.05));
+                },
+
+                // Step 5: Smooth scroll website back up to top & Concluding Announcement
+                onScrollUp: () => {
+                    console.log("[+] SMOOTH SCROLLING BACK UP TO TOP FOR CONCLUDING ANNOUNCEMENT...");
+                    clearCardHighlights();
+                    if (revealedWebsiteContainer) {
+                        revealedWebsiteContainer.style.transform = 'translateY(0)';
+                    }
+                    if (cyberCursor) {
+                        cyberCursor.style.transform = `translate(${window.innerWidth / 2 - 20}px, 60px)`;
+                        setTimeout(() => cyberCursor.classList.remove('active'), 1200);
+                    }
+                    if (cursorTooltip) {
+                        cursorTooltip.innerText = "CEREMONY COMPLETE";
+                    }
+                }
+            });
         }, 600);
     }
 
@@ -502,11 +548,16 @@ document.addEventListener('DOMContentLoaded', () => {
             if ('speechSynthesis' in window) window.speechSynthesis.cancel();
             const subtitleBar = document.getElementById('ceremonySubtitleBar');
             if (subtitleBar) subtitleBar.style.display = 'none';
-            const revealedIframe = document.getElementById('revealedIframe');
-            if (revealedIframe) {
-                revealedIframe.style.transform = 'translateY(0)';
-                try { if (revealedIframe.contentWindow) revealedIframe.contentWindow.scrollTo({ top: 0 }); } catch (err) {}
+            const revealedWebsiteContainer = document.getElementById('revealedWebsiteContainer');
+            if (revealedWebsiteContainer) {
+                revealedWebsiteContainer.style.transform = 'translateY(0)';
             }
+            const cyberCursor = document.getElementById('cyberCursor');
+            if (cyberCursor) {
+                cyberCursor.classList.remove('active');
+                cyberCursor.style.transform = 'translate(-100px, -100px)';
+            }
+            document.querySelectorAll('.event-card-target').forEach(card => card.classList.remove('card-hover-active'));
 
             if (revealUnveiled) revealUnveiled.style.display = 'none';
             const topBar = document.querySelector('.top-hud-bar');

@@ -235,43 +235,71 @@ class SciFiAudioEngine {
         }
     }
 
-    startCeremonyVoiceTour(onStepCallback, onScrollToEventsCallback) {
+    startCeremonyVoiceTour(callbacks = {}) {
+        const { onStepCallback, onScrollDown, onHoverCard, onScrollUp } = callbacks;
+
         const tourSteps = [
             {
-                speech: "Palm reading successfully completed!",
-                display: "✨ PALM READING SUCCESSFULLY COMPLETED! ✨",
-                delay: 1000
-            },
-            {
+                stepId: "motto",
                 speech: "TECH MANTHAN 6.0 — DIVIDED BY ZERO, UNITED BY ONE.",
                 display: "🚀 TECH MANTHAN 6.0 — DIVIDED BY ZERO, UNITED BY ONE.",
-                delay: 1400,
-                triggerScroll: true
+                delay: 1200,
+                action: () => {
+                    if (onScrollDown) onScrollDown();
+                }
             },
             {
-                speech: "Coding: Create your own world. Solve algorithmic puzzles and write clean code to win the ultimate prize.",
-                display: "💻 CODING: Create your own world. Solve algorithmic puzzles and write clean code to win the ultimate prize.",
-                delay: 800
+                stepId: "card-1",
+                cardIndex: 1,
+                cardTitle: "Coding",
+                speech: "1. Coding: Create your own world. Solve algorithmic puzzles and write clean code to win the ultimate prize.",
+                display: "1. 🎮 Coding: \"Create your own world. Solve algorithmic puzzles and write clean code to win the ultimate prize.\"",
+                delay: 1000,
+                action: () => {
+                    if (onHoverCard) onHoverCard(1, "Coding");
+                }
             },
             {
-                speech: "Group Dance: Your time to shine. Showcase technical skits, digital presentations, or creative dances.",
-                display: "💃 GROUP DANCE: Your time to shine. Showcase technical skits, digital presentations, or creative dances.",
-                delay: 800
+                stepId: "card-2",
+                cardIndex: 2,
+                cardTitle: "Group Dance",
+                speech: "2. Group Dance: Your time to shine. Showcase technical skits, digital presentations, or creative dances.",
+                display: "2. 💃 Group Dance: \"Your time to shine. Showcase technical skits, digital presentations, or creative dances.\"",
+                delay: 1000,
+                action: () => {
+                    if (onHoverCard) onHoverCard(2, "Group Dance");
+                }
             },
             {
-                speech: "Gaming: Show the spirit. Compete head to head in competitive multiplayer tournaments.",
-                display: "🎮 GAMING: Show the spirit. Compete head-to-head in competitive multiplayer tournaments.",
-                delay: 800
+                stepId: "card-3",
+                cardIndex: 3,
+                cardTitle: "Gaming",
+                speech: "3. Gaming: Show the spirit. Compete head to head in competitive multiplayer tournaments.",
+                display: "3. 🕹️ Gaming: \"Show the spirit. Compete head-to-head in competitive multiplayer tournaments.\"",
+                delay: 1000,
+                action: () => {
+                    if (onHoverCard) onHoverCard(3, "Gaming");
+                }
             },
             {
-                speech: "Best I T Manager: Corporate tech survival. Test your management, crisis resolution, and executive pitching skills.",
-                display: "👔 BEST IT MANAGER: Corporate tech survival. Test your management, crisis resolution, and executive pitching skills.",
-                delay: 800
+                stepId: "card-4",
+                cardIndex: 4,
+                cardTitle: "Best IT Manager",
+                speech: "4. Best I T Manager: Corporate tech survival. Test your management, crisis resolution, and executive pitching skills.",
+                display: "4. 👔 Best IT Manager: \"Corporate tech survival. Test your management, crisis resolution, and executive pitching skills.\"",
+                delay: 1200,
+                action: () => {
+                    if (onHoverCard) onHoverCard(4, "Best IT Manager");
+                }
             },
             {
-                speech: "Detailed guidelines will be announced later. All the best to all teams!",
-                display: "🌟 Detailed guidelines will be announced later. All the best to all teams!",
-                delay: 1500
+                stepId: "concluding",
+                speech: "Step 5: Concluding Announcement. Detailed guidelines will be announced later. All the best to all teams!",
+                display: "Step 5: Concluding Announcement 🔊 \"Detailed guidelines will be announced later. All the best to all teams!\"",
+                delay: 1500,
+                action: () => {
+                    if (onScrollUp) onScrollUp();
+                }
             }
         ];
 
@@ -281,12 +309,12 @@ class SciFiAudioEngine {
             if (currentStep >= tourSteps.length) return;
             const step = tourSteps[currentStep];
 
-            if (onStepCallback) {
-                onStepCallback(step.display);
+            if (step.action) {
+                step.action();
             }
 
-            if (step.triggerScroll && onScrollToEventsCallback) {
-                onScrollToEventsCallback();
+            if (onStepCallback) {
+                onStepCallback(step.display);
             }
 
             this.speakText(step.speech, () => {
