@@ -433,24 +433,7 @@ document.addEventListener('DOMContentLoaded', () => {
             console.log("Backend offline or local preview mode.");
         }
 
-        // 6. Fast transition (600ms) to speak motto and redirect directly to official home page
-        setTimeout(() => {
-            if (stageGrid) stageGrid.style.display = 'none';
-            const topBar = document.querySelector('.top-hud-bar');
-            if (topBar) topBar.style.display = 'none';
-            const collegeBadge = document.querySelector('.college-header-badge');
-            if (collegeBadge) collegeBadge.style.display = 'none';
-
-            if (revealUnveiled) {
-                revealUnveiled.style.display = 'flex';
-            }
-
-            const revealedIframe = document.getElementById('revealedIframe');
-            if (revealedIframe) {
-                revealedIframe.style.transform = 'translateY(0)';
-            }
-
-            // Trigger Automated Voice Narration Ceremony Tour & Slow Smooth Scroll Sequence
+            // Trigger Automated Voice Narration Ceremony Tour, Virtual Cursor & Slow Smooth Scroll
             const subtitleText = document.getElementById('subtitleText');
             const subtitleBar = document.getElementById('ceremonySubtitleBar');
             const revealedIframe = document.getElementById('revealedIframe');
@@ -470,19 +453,19 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             };
 
-            const scrollToEventsSlow = () => {
+            const scrollToEvents = () => {
                 if (revealedIframe) {
                     try {
                         if (revealedIframe.contentWindow) {
-                            revealedIframe.contentWindow.scrollTo({ top: 680, behavior: 'smooth' });
+                            revealedIframe.contentWindow.scrollTo({ top: 580, behavior: 'smooth' });
                         }
                     } catch (err) {}
-                    // Slow smooth visual transition to Events Directory on portal
-                    revealedIframe.style.transform = 'translateY(-560px)';
+                    // Slow smooth visual transition down to Events Directory
+                    revealedIframe.style.transform = 'translateY(-480px)';
                 }
             };
 
-            const scrollToTopSlow = () => {
+            const scrollToTop = () => {
                 if (revealedIframe) {
                     try {
                         if (revealedIframe.contentWindow) {
@@ -498,15 +481,15 @@ document.addEventListener('DOMContentLoaded', () => {
                     virtualCursor.style.left = `${xPercent}%`;
                     virtualCursor.style.top = `${yPercent}%`;
                     virtualCursor.classList.add('hovering');
-                    setTimeout(() => virtualCursor.classList.remove('hovering'), 600);
+                    setTimeout(() => virtualCursor.classList.remove('hovering'), 500);
                 }
                 if (cursorLabel) {
                     cursorLabel.innerText = label || "CARD SELECTOR";
                 }
-                if (audio) audio.playScanChirp(0.75);
+                audio.playScanChirp(0.75);
             };
 
-            audio.startCeremonyVoiceTour(updateSubtitles, scrollToEventsSlow, scrollToTopSlow, moveCursor);
+            audio.startCeremonyVoiceTour(updateSubtitles, scrollToEvents, scrollToTop, moveCursor);
         }, 600);
     }
 
