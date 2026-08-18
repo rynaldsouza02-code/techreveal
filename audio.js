@@ -202,6 +202,109 @@ class SciFiAudioEngine {
             console.error("Audio error:", e);
         }
     }
+
+    // Speech Synthesis Engine for Guided Voice Ceremony Tour
+    speakText(text, onEnd) {
+        if (!('speechSynthesis' in window)) {
+            if (onEnd) onEnd();
+            return;
+        }
+
+        try {
+            window.speechSynthesis.cancel();
+            const utterance = new SpeechSynthesisUtterance(text);
+            utterance.rate = 0.95;
+            utterance.pitch = 1.05;
+            utterance.volume = 1.0;
+
+            const voices = window.speechSynthesis.getVoices();
+            const preferredVoice = voices.find(v => v.lang && v.lang.startsWith('en') && (v.name.includes('Google') || v.name.includes('Natural') || v.name.includes('Zira') || v.name.includes('Samantha') || v.name.includes('David')));
+            if (preferredVoice) utterance.voice = preferredVoice;
+
+            utterance.onend = () => {
+                if (onEnd) onEnd();
+            };
+
+            utterance.onerror = () => {
+                if (onEnd) onEnd();
+            };
+
+            window.speechSynthesis.speak(utterance);
+        } catch (e) {
+            if (onEnd) onEnd();
+        }
+    }
+
+    startCeremonyVoiceTour(onStepCallback, onScrollToEventsCallback) {
+        const tourSteps = [
+            {
+                speech: "Palm reading successfully completed!",
+                display: "✨ PALM READING SUCCESSFULLY COMPLETED! ✨",
+                delay: 1000
+            },
+            {
+                speech: "TECH MANTHAN 6.0 — DIVIDED BY ZERO, UNITED BY ONE.",
+                display: "🚀 TECH MANTHAN 6.0 — DIVIDED BY ZERO, UNITED BY ONE.",
+                delay: 1400,
+                triggerScroll: true
+            },
+            {
+                speech: "Coding: Create your own world. Solve algorithmic puzzles and write clean code to win the ultimate prize.",
+                display: "💻 CODING: Create your own world. Solve algorithmic puzzles and write clean code to win the ultimate prize.",
+                delay: 800
+            },
+            {
+                speech: "Group Dance: Your time to shine. Showcase technical skits, digital presentations, or creative dances.",
+                display: "💃 GROUP DANCE: Your time to shine. Showcase technical skits, digital presentations, or creative dances.",
+                delay: 800
+            },
+            {
+                speech: "Gaming: Show the spirit. Compete head to head in competitive multiplayer tournaments.",
+                display: "🎮 GAMING: Show the spirit. Compete head-to-head in competitive multiplayer tournaments.",
+                delay: 800
+            },
+            {
+                speech: "Best I T Manager: Corporate tech survival. Test your management, crisis resolution, and executive pitching skills.",
+                display: "👔 BEST IT MANAGER: Corporate tech survival. Test your management, crisis resolution, and executive pitching skills.",
+                delay: 800
+            },
+            {
+                speech: "Detailed guidelines will be announced later. All the best to all teams!",
+                display: "🌟 Detailed guidelines will be announced later. All the best to all teams!",
+                delay: 1500
+            }
+        ];
+
+        let currentStep = 0;
+
+        const processNextStep = () => {
+            if (currentStep >= tourSteps.length) return;
+            const step = tourSteps[currentStep];
+
+            if (onStepCallback) {
+                onStepCallback(step.display);
+            }
+
+            if (step.triggerScroll && onScrollToEventsCallback) {
+                onScrollToEventsCallback();
+            }
+
+            this.speakText(step.speech, () => {
+                currentStep++;
+                if (currentStep < tourSteps.length) {
+                    setTimeout(processNextStep, step.delay || 800);
+                }
+            });
+        };
+
+        if ('speechSynthesis' in window && window.speechSynthesis.getVoices().length === 0) {
+            window.speechSynthesis.onvoiceschanged = () => {
+                setTimeout(processNextStep, 500);
+            };
+        } else {
+            setTimeout(processNextStep, 500);
+        }
+    }
 }
 
 window.SciFiAudioEngine = SciFiAudioEngine;

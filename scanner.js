@@ -445,6 +445,39 @@ document.addEventListener('DOMContentLoaded', () => {
             // Trigger extra victory particles
             particles.createShockwave(window.innerWidth / 2, window.innerHeight / 2, '#00f3ff', 1200);
             setTimeout(() => particles.createShockwave(window.innerWidth / 2, window.innerHeight / 2, '#bc13fe', 1400), 200);
+
+            // Trigger Automated Voice Narration Ceremony Tour & Scroll Sequence
+            const subtitleText = document.getElementById('subtitleText');
+            const subtitleBar = document.getElementById('ceremonySubtitleBar');
+            const revealedIframe = document.getElementById('revealedIframe');
+
+            if (subtitleBar) subtitleBar.style.display = 'flex';
+
+            const updateSubtitles = (text) => {
+                if (subtitleText) {
+                    subtitleText.style.opacity = '0';
+                    setTimeout(() => {
+                        subtitleText.innerText = text;
+                        subtitleText.style.opacity = '1';
+                    }, 150);
+                }
+            };
+
+            const scrollToEvents = () => {
+                if (revealedIframe) {
+                    try {
+                        // Smoothly scroll revealed iframe to competition events directory
+                        if (revealedIframe.contentWindow) {
+                            revealedIframe.contentWindow.scrollTo({ top: 680, behavior: 'smooth' });
+                        }
+                    } catch (err) {
+                        // Fallback container scroll animation
+                        revealedIframe.style.transform = 'translateY(-280px)';
+                    }
+                }
+            };
+
+            audio.startCeremonyVoiceTour(updateSubtitles, scrollToEvents);
         }, 600);
     }
 
@@ -457,6 +490,15 @@ document.addEventListener('DOMContentLoaded', () => {
             isPalmScanLocked = false;
             scanProgress = 0;
             updateProgressUI();
+
+            if ('speechSynthesis' in window) window.speechSynthesis.cancel();
+            const subtitleBar = document.getElementById('ceremonySubtitleBar');
+            if (subtitleBar) subtitleBar.style.display = 'none';
+            const revealedIframe = document.getElementById('revealedIframe');
+            if (revealedIframe) {
+                revealedIframe.style.transform = 'translateY(0)';
+                try { if (revealedIframe.contentWindow) revealedIframe.contentWindow.scrollTo({ top: 0 }); } catch (err) {}
+            }
 
             if (revealUnveiled) revealUnveiled.style.display = 'none';
             const topBar = document.querySelector('.top-hud-bar');
