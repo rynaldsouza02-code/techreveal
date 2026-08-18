@@ -223,30 +223,13 @@ document.addEventListener('DOMContentLoaded', () => {
         ctx.restore();
     }
 
-    // Optical hand presence detector (strict palm reticle threshold)
+    // Optical HUD reticle rendering loop (no automatic false triggers)
     function processOpticalFallback() {
         if (!isRevealed && isCameraActive && video.readyState >= 2) {
             if (!handDetected && ctx) {
                 try {
-                    fallbackCanvas.width = 80;
-                    fallbackCanvas.height = 60;
-                    fallbackCtx.drawImage(video, 0, 0, 80, 60);
-                    const imgData = fallbackCtx.getImageData(20, 15, 40, 30).data;
-                    let skinPixels = 0;
-                    for (let i = 0; i < imgData.length; i += 4) {
-                        const r = imgData[i];
-                        const g = imgData[i + 1];
-                        const b = imgData[i + 2];
-                        if (r > 60 && g > 40 && b > 25 && r > g && r > b && (r - Math.min(g, b)) > 15) {
-                            skinPixels++;
-                        }
-                    }
-                    // Trigger only when hand/palm is presented in central reticle area
-                    if (skinPixels > 160) {
-                        ctx.clearRect(0, 0, canvas.width, canvas.height);
-                        drawSimulatedCyberHand();
-                        triggerPalmScanLockOn();
-                    }
+                    ctx.clearRect(0, 0, canvas.width, canvas.height);
+                    drawSimulatedCyberHand();
                 } catch (e) {}
             }
         }
