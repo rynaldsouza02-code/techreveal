@@ -472,17 +472,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 websiteContainer.scrollTop = 0;
             }
 
-            // Speak motto announcement and then execute automatic smooth scroll to Events Directory
+            // Speak motto announcement and then execute slow, silky-smooth auto-scroll to Events Directory
             const performAutoScroll = () => {
                 setTimeout(() => {
-                    // Smoothly scroll iframe viewport to #events section on official home page
-                    if (revealedIframe) {
-                        try {
-                            revealedIframe.src = "https://tech.manthana.bbhegdecollege.com/home.html#events";
-                        } catch (e) {}
-                    }
+                    // Slow 6.0-second glide down to Events Directory section
                     if (websiteContainer) {
-                        slowSmoothScroll(websiteContainer, 650, 4500);
+                        slowSmoothScroll(websiteContainer, 720, 6000);
                     }
                 }, 1400);
             };
