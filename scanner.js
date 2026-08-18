@@ -433,7 +433,7 @@ document.addEventListener('DOMContentLoaded', () => {
             console.log("Backend offline or local preview mode.");
         }
 
-        // 6. Fast transition (600ms) to reveal home page, speak motto and scroll to Events Directory
+        // 6. Fast transition (600ms) to speak motto and redirect directly to official home page
         setTimeout(() => {
             if (stageGrid) stageGrid.style.display = 'none';
             const topBar = document.querySelector('.top-hud-bar');
@@ -453,26 +453,13 @@ document.addEventListener('DOMContentLoaded', () => {
             // Speak motto announcement out loud
             if (audio) {
                 audio.speakText("TECH MANTHAN 6.0 — DIVIDED BY ZERO, UNITED BY ONE.", () => {
-                    // After motto is announced, smoothly scroll down into the Events Directory section
+                    // Redirect directly to official portal home page (Events Directory section)
                     setTimeout(() => {
-                        if (revealedIframe) {
-                            try {
-                                if (revealedIframe.contentWindow) {
-                                    const eventsEl = revealedIframe.contentWindow.document.getElementById('events') || 
-                                                     revealedIframe.contentWindow.document.getElementById('catalogTitle');
-                                    if (eventsEl) {
-                                        eventsEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                                    } else {
-                                        revealedIframe.contentWindow.scrollTo({ top: 580, behavior: 'smooth' });
-                                    }
-                                }
-                            } catch (e) {
-                                // Container scroll fallback if cross-origin scroll is constrained
-                                revealedIframe.style.transform = 'translateY(-520px)';
-                            }
-                        }
-                    }, 400);
+                        window.location.href = "https://tech.manthana.bbhegdecollege.com/home.html#events";
+                    }, 500);
                 });
+            } else {
+                window.location.href = "https://tech.manthana.bbhegdecollege.com/home.html#events";
             }
         }, 600);
     }
