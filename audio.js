@@ -235,71 +235,51 @@ class SciFiAudioEngine {
         }
     }
 
-    startCeremonyVoiceTour(callbacks = {}) {
-        const { onStepCallback, onScrollDown, onHoverCard, onScrollUp } = callbacks;
-
+    startCeremonyVoiceTour(onStepCallback, onScrollToEventsCallback, onScrollToTopCallback, onCursorMoveCallback) {
         const tourSteps = [
             {
-                stepId: "motto",
                 speech: "TECH MANTHAN 6.0 — DIVIDED BY ZERO, UNITED BY ONE.",
                 display: "🚀 TECH MANTHAN 6.0 — DIVIDED BY ZERO, UNITED BY ONE.",
-                delay: 1200,
-                action: () => {
-                    if (onScrollDown) onScrollDown();
-                }
+                cursor: { x: 50, y: 25, label: "TECH MANTHAN 6.0" },
+                delay: 1000
             },
             {
-                stepId: "card-1",
-                cardIndex: 1,
-                cardTitle: "Coding",
+                speech: "Step 3: Unveil Website and Smooth Scroll down to the Events Directory.",
+                display: "📜 STEP 3: UNVEIL WEBSITE & SMOOTH SCROLL TO EVENTS DIRECTORY",
+                triggerScrollEvents: true,
+                cursor: { x: 50, y: 40, label: "EVENTS DIRECTORY" },
+                delay: 1200
+            },
+            {
                 speech: "1. Coding: Create your own world. Solve algorithmic puzzles and write clean code to win the ultimate prize.",
                 display: "1. 🎮 Coding: \"Create your own world. Solve algorithmic puzzles and write clean code to win the ultimate prize.\"",
-                delay: 1000,
-                action: () => {
-                    if (onHoverCard) onHoverCard(1, "Coding");
-                }
+                cursor: { x: 28, y: 38, label: "1. 🎮 CODING" },
+                delay: 800
             },
             {
-                stepId: "card-2",
-                cardIndex: 2,
-                cardTitle: "Group Dance",
                 speech: "2. Group Dance: Your time to shine. Showcase technical skits, digital presentations, or creative dances.",
                 display: "2. 💃 Group Dance: \"Your time to shine. Showcase technical skits, digital presentations, or creative dances.\"",
-                delay: 1000,
-                action: () => {
-                    if (onHoverCard) onHoverCard(2, "Group Dance");
-                }
+                cursor: { x: 72, y: 38, label: "2. 💃 GROUP DANCE" },
+                delay: 800
             },
             {
-                stepId: "card-3",
-                cardIndex: 3,
-                cardTitle: "Gaming",
-                speech: "3. Gaming: Show the spirit. Compete head to head in competitive multiplayer tournaments.",
+                speech: "3. Gaming: Show the spirit. Compete head-to-head in competitive multiplayer tournaments.",
                 display: "3. 🕹️ Gaming: \"Show the spirit. Compete head-to-head in competitive multiplayer tournaments.\"",
-                delay: 1000,
-                action: () => {
-                    if (onHoverCard) onHoverCard(3, "Gaming");
-                }
+                cursor: { x: 28, y: 72, label: "3. 🕹️ GAMING" },
+                delay: 800
             },
             {
-                stepId: "card-4",
-                cardIndex: 4,
-                cardTitle: "Best IT Manager",
                 speech: "4. Best I T Manager: Corporate tech survival. Test your management, crisis resolution, and executive pitching skills.",
                 display: "4. 👔 Best IT Manager: \"Corporate tech survival. Test your management, crisis resolution, and executive pitching skills.\"",
-                delay: 1200,
-                action: () => {
-                    if (onHoverCard) onHoverCard(4, "Best IT Manager");
-                }
+                cursor: { x: 72, y: 72, label: "4. 👔 BEST IT MANAGER" },
+                delay: 800
             },
             {
-                stepId: "concluding",
-                speech: "Step 5: Concluding Announcement. Detailed guidelines will be announced later. All the best to all teams!",
+                speech: "Detailed guidelines will be announced later. All the best to all teams!",
                 display: "Step 5: Concluding Announcement 🔊 \"Detailed guidelines will be announced later. All the best to all teams!\"",
-                delay: 1500,
-                action: () => {
-                    if (onScrollUp) onScrollUp();
-                }
+                triggerScrollTop: true,
+                cursor: { x: 50, y: 20, label: "CONCLUDING ANNOUNCEMENT" },
+                delay: 1500
             }
         ];
 
@@ -309,12 +289,20 @@ class SciFiAudioEngine {
             if (currentStep >= tourSteps.length) return;
             const step = tourSteps[currentStep];
 
-            if (step.action) {
-                step.action();
-            }
-
             if (onStepCallback) {
                 onStepCallback(step.display);
+            }
+
+            if (step.triggerScrollEvents && onScrollToEventsCallback) {
+                onScrollToEventsCallback();
+            }
+
+            if (step.triggerScrollTop && onScrollToTopCallback) {
+                onScrollToTopCallback();
+            }
+
+            if (step.cursor && onCursorMoveCallback) {
+                onCursorMoveCallback(step.cursor.x, step.cursor.y, step.cursor.label);
             }
 
             this.speakText(step.speech, () => {

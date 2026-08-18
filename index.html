@@ -156,54 +156,29 @@
         <div class="reveal-unveiled-stage">
 
             <!-- Embedded Live Revealed Website Container (Full Screen) -->
-            <div class="revealed-website-container" id="revealedWebsiteContainer">
-                <iframe src="https://tech.manthana.bbhegdecollege.com/home.html" class="revealed-website-iframe"
-                    id="revealedIframe" title="Tech Manthan 6.0 Official Website"></iframe>
+            <div class="revealed-website-container">
+                <iframe src="https://tech.manthana.bbhegdecollege.com/home.html" id="revealedIframe" class="revealed-website-iframe"
+                    title="Tech Manthan 6.0 Official Website"></iframe>
 
-                <!-- Interactive Overlay Competition Card Targets for Virtual Cursor Hover -->
-                <div class="events-overlay-grid" id="eventsOverlayGrid">
-                    <div class="event-card-target" id="card-coding" data-card="1">
-                        <span class="card-badge">COMPETITION 1</span>
-                        <div class="card-target-content">
-                            <h3>🎮 Coding</h3>
-                            <p>"Create your own world. Solve algorithmic puzzles and write clean code to win the ultimate prize."</p>
-                        </div>
+                <!-- Automated Virtual Cyber Pointer Cursor Overlay -->
+                <div id="virtualCursor" class="virtual-cyber-cursor">
+                    <div class="cursor-pointer">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                            <polygon points="3 3, 10 21, 14 14, 21 10" fill="rgba(0, 243, 255, 0.4)" stroke="#00f3ff"/>
+                        </svg>
                     </div>
-                    <div class="event-card-target" id="card-groupdance" data-card="2">
-                        <span class="card-badge">COMPETITION 2</span>
-                        <div class="card-target-content">
-                            <h3>💃 Group Dance</h3>
-                            <p>"Your time to shine. Showcase technical skits, digital presentations, or creative dances."</p>
-                        </div>
-                    </div>
-                    <div class="event-card-target" id="card-gaming" data-card="3">
-                        <span class="card-badge">COMPETITION 3</span>
-                        <div class="card-target-content">
-                            <h3>🕹️ Gaming</h3>
-                            <p>"Show the spirit. Compete head-to-head in competitive multiplayer tournaments."</p>
-                        </div>
-                    </div>
-                    <div class="event-card-target" id="card-itmanager" data-card="4">
-                        <span class="card-badge">COMPETITION 4</span>
-                        <div class="card-target-content">
-                            <h3>👔 Best IT Manager</h3>
-                            <p>"Corporate tech survival. Test your management, crisis resolution, and executive pitching skills."</p>
-                        </div>
-                    </div>
+                    <div class="cursor-ring"></div>
+                    <div class="cursor-pulse"></div>
+                    <div class="cursor-label" id="cursorLabel">CARD SELECTOR</div>
                 </div>
             </div>
 
-            <!-- Automated Virtual Cyber Mouse Cursor -->
-            <div class="virtual-cyber-cursor" id="cyberCursor">
-                <div class="cursor-pointer-arrow"></div>
-                <div class="cursor-laser-ring"></div>
-                <div class="cursor-tooltip" id="cursorTooltip">TARGETING...</div>
-            </div>
-
-            <!-- Subtitle Telemetry Caption Bar -->
-            <div class="ceremony-subtitle-bar" id="ceremonySubtitleBar" style="display: none;">
-                <span class="subtitle-badge">NARRATION</span>
-                <span class="subtitle-text" id="subtitleText">TECH MANTHAN 6.0 INITIALIZING...</span>
+            <!-- Subtitle & Ceremony HUD Announcement Bar -->
+            <div id="ceremonySubtitleBar" class="ceremony-subtitle-bar">
+                <div class="subtitle-badge">
+                    <span class="pulse-dot"></span> AUDIO TOUR
+                </div>
+                <div id="subtitleText" class="subtitle-text">INITIALIZING CEREMONY...</div>
             </div>
 
         </div>
